@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ANDB - NextGen API Data Hub</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --bg-color: #060913;
+            --panel-bg: #0d1222;
+            --accent-cyan: #00f0ff;
+            --accent-purple: #9d4edd;
+            --text-color: #c0caf5;
+            --neon-shadow: 0 0 10px rgba(0, 240, 255, 0.3), 0 0 20px rgba(0, 240, 255, 0.1);
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            font-family: 'Share Tech Mono', monospace;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Hiệu ứng nền ma trận quét */
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+            background-size: 100% 4px, 6px 100%;
+            z-index: 1000;
+            pointer-events: none;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 750px;
+            perspective: 1000px;
+        }
+
+        .panel {
+            background: var(--panel-bg);
+            border: 2px solid #1f294d;
+            border-radius: 16px;
+            padding: 30px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.5), inset 0 0 15px rgba(0, 240, 255, 0.05);
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            backdrop-filter: blur(10px);
+        }
+
+        .panel:hover {
+            border-color: var(--accent-cyan);
+            box-shadow: 0 0 25px rgba(0, 240, 255, 0.2), inset 0 0 20px rgba(0, 240, 255, 0.05);
+        }
+
+        h1.brand {
+            font-family: 'Orbitron', sans-serif;
+            text-align: center;
+            color: #fff;
+            text-shadow: 0 0 10px var(--accent-cyan);
+            font-size: 2.5rem;
+            margin-bottom: 5px;
+            letter-spacing: 4px;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #565f89;
+            font-size: 0.9rem;
+            margin-bottom: 30px;
+            text-transform: uppercase;
+        }
+
+        /* Form điều khiển nhập liệu */
+        .input-group {
+            position: relative;
+            margin-bottom: 20px;
+        }
+
+        .input-group i {
+            position: absolute;
+            left: 15px;
+            top: 15px;
+            color: #414868;
+            transition: 0.3s;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 14px 15px 14px 45px;
+            background: #090d1a;
+            border: 1px solid #242b4b;
+            border-radius: 8px;
+            color: #fff;
+            font-family: inherit;
+            font-size: 1rem;
+            box-sizing: border-box;
+            transition: 0.3s;
+        }
+
+        input:focus, select:focus {
+            border-color: var(--accent-cyan);
+            outline: none;
+            box-shadow: 0 0 10px rgba(0, 240, 255, 0.2);
+        }
+
+        input:focus + i {
+            color: var(--accent-cyan);
+        }
+
+        .btn {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(45deg, #00f0ff, #9d4edd);
+            border: none;
+            border-radius: 8px;
+            color: #fff;
+            font-family: 'Orbitron', sans-serif;
+            font-weight: bold;
+            font-size: 1rem;
+            cursor: pointer;
+            letter-spacing: 2px;
+            transition: 0.3s;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 20px rgba(0, 240, 255, 0.4);
+        }
+
+        .btn:active { transform: translateY(1px); }
+
+        .switch-mode {
+            text-align: center;
+            margin-top: 15px;
+            font-size: 0.9rem;
+            color: #565f89;
+        }
+
+        .switch-mode span {
+            color: var(--accent-cyan);
+            cursor: pointer;
+            text-decoration: underline;
+        }
+
+        /* Khu vực hiển thị sau khi đăng nhập */
+        .dashboard { display: none; }
+
+        .api-box {
+            background: #090d1a;
+            border: 1px dashed var(--accent-cyan);
+            padding: 15px;
+            border-radius: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+
+        .api-key {
+            color: #e0af68;
+            font-weight: bold;
+            font-size: 1.1rem;
+            letter-spacing: 1px;
+        }
+
+        .badge-verify {
+            background: #242b4b;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+        }
+
+        .verified { color: #9ece6a; border: 1px solid #9ece6a; }
+        .unverified { color: #f7768e; border: 1px solid #f7768e; }
+
+        /* Khung quản lý file data */
+        .manager-box {
+            background: #090d1a;
+            border: 1px solid #1f294d;
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+        }
+
+        .manager-title {
+            font-family: 'Orbitron', sans-serif;
+            color: var(--accent-cyan);
+            border-bottom: 1px solid #1f294d;
+            padding-bottom: 10px;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .row-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        /* Console log mini */
+        #term-log {
+            background: #020408;
+            border: 1px solid #1a1f36;
+            border-radius: 6px;
+            padding: 12px;
+            font-size: 0.85rem;
+            color: #73daca;
+            height: 100px;
+            overflow-y: auto;
+            margin-top: 15px;
+            white-space: pre-wrap;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="panel">
+        <h1 class="brand">ANDB // HUB</h1>
+        <div class="subtitle">Hệ thống API Cấu Trúc Dữ Liệu Biệt Lập</div>
+
+        <div id="auth-box">
+            <h3 id="form-title" style="color: #fff; margin-bottom: 20px;"><i class="fa-solid : fontawesome-icon-class"></i> ĐĂNG NHẬP HỆ THỐNG</h3>
+            
+            <div class="input-group" id="user-field" style="display: none;">
+                <input type="text" id="auth-username" placeholder="Tên tài khoản (6-16 ký tự, ko dấu, ko cách)">
+                <i class="fa-solid fa-user"></i>
+            </div>
+
+            <div class="input-group">
+                <input type="email" id="auth-email" placeholder="Địa chỉ Email của bạn">
+                <i class="fa-solid fa-envelope"></i>
+            </div>
+
+            <div class="input-group">
+                <input type="password" id="auth-password" placeholder="Mật khẩu (6-12 ký tự, ko dấu, ko cách)">
+                <i class="fa-solid fa-lock"></i>
+            </div>
+
+            <button class="btn" id="btn-submit" onclick="handleAuth()">XÁC NHẬN TRUY CẬP</button>
+            
+            <div class="switch-mode" id="toggle-text">
+                Chưa có mã nguồn? <span onclick="switchMode(true)">Đăng ký tài khoản ANDB ngay</span>
+            </div>
+        </div>
+
+        <div id="dashboard-box" class="dashboard">
+            <div class="api-box">
+                <div>
+                    <span style="font-size: 0.8rem; color:#565f89; display:block;">MÃ API DATA ANDB CỦA BẠN:</span>
+                    <span class="api-key" id="display-apikey">🔑 Khởi tạo...</span>
+                </div>
+                <span id="verify-badge" class="badge-verify unverified">Chưa kích hoạt</span>
+            </div>
+
+            <div class="manager-box">
+                <div class="manager-title"><i class="fa-solid fa-folder-tree"></i> TRÌNH QUẢN LÝ MỤC & FILE DATA</div>
+                
+                <label style="font-size:0.8rem; color:#565f89;">Chọn loại dữ liệu muốn khởi tạo:</label>
+                <select id="data-type" style="padding-left:15px; margin-top:5px;" onchange="adjustFormFields()">
+                    <option value="folder">📁 Tạo mục lớn (Thư mục trống)</option>
+                    <option value="file_text">📝 Thêm File dữ liệu chữ (Văn bản / String)</option>
+                    <option value="file_currency">💰 Thêm File Tiền tệ & Số (Number)</option>
+                </select>
+
+                <div class="row-grid" style="margin-top: 15px;">
+                    <div>
+                        <label style="font-size:0.8rem; color:#565f89;">Tên mục / Tên File:</label>
+                        <input type="text" id="node-name" placeholder="Ví dụ: vang_user, level" style="padding-left:15px; margin-top:5px;">
+                    </div>
+                    <div id="val-field" style="display: none;">
+                        <label style="font-size:0.8rem; color:#565f89;" id="val-label">Giá trị:</label>
+                        <input type="text" id="node-value" placeholder="Nhập giá trị..." style="padding-left:15px; margin-top:5px;">
+                    </div>
+                </div>
+
+                <div class="row-grid" style="margin-top:15px;">
+                    <button class="btn" style="background: #10b981;" onclick="executeDataAction('set')">⚡ THỰC THI/CẬP NHẬT</button>
+                    <button class="btn" style="background: #ef4444;" onclick="executeDataAction('delete')">🗑️ XÓA MỤC NÀY</button>
+                </div>
+            </div>
+
+            <div id="term-log">&gt;_ Hệ thống dữ liệu ANDB đã kết nối an toàn.</div>
+            <button class="btn" style="margin-top:20px; background:#242b4b;" onclick="logout()">ĐĂNG XUẤT</button>
+        </div>
+    </div>
+</div>
+
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+    import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, sendEmailVerification, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+    import { getDatabase, ref, set, remove, get, child } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
+
+    // 🔴 BƯỚC CẦN LÀM: Điền cấu hình Firebase của bro An vào đây
+    const firebaseConfig = {
+        apiKey: "ĐIỀN_API_KEY_VÀO_ĐÂY",
+        authDomain: "TÊN_DỰ_ÁN.firebaseapp.com",
+        databaseURL: "https://TÊN_DỰ_ÁN-default-rtdb.firebaseio.com",
+        projectId: "TÊN_DỰ_ÁN",
+        storageBucket: "TÊN_DỰ_ÁN.appspot.com",
+        messagingSenderId: "123456789",
+        appId: "1:123456:web:abcdef"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const database = getDatabase(app);
+
+    let isRegisterMode = false;
+    let currentUserUid = null;
+
+    // Quản lý log console màn hình hình đen
+    window.printLog = function(msg, color = "#73daca") {
+        const logBox = document.getElementById('term-log');
+        logBox.innerHTML += `\n<span style="color:${color}">&gt; ${msg}</span>`;
+        logBox.scrollTop = logBox.scrollHeight;
+    }
+
+    // Chuyển đổi giao diện Đăng ký / Đăng nhập
+    window.switchMode = function(mode) {
+        isRegisterMode = mode;
+        document.getElementById('form-title').innerHTML = mode ? '<i class="fa-solid fa-user-plus"></i> ĐĂNG KÝ ANDB ACCOUNT' : '<i class="fa-solid fa-right-to-bracket"></i> ĐĂNG NHẬP HỆ THỐNG';
+        document.getElementById('user-field').style.display = mode ? 'block' : 'none';
+        document.getElementById('toggle-text').innerHTML = mode ? 'Đã có tài khoản? <span onclick="switchMode(false)">Đăng nhập ngay</span>' : 'Chưa có mã nguồn? <span onclick="switchMode(true)">Đăng ký tài khoản ANDB ngay</span>';
+    }
+
+    // Kiểm tra tính hợp lệ của chuỗi gõ vào (Không dấu, không cách)
+    function validateInput(text, min, max) {
+        const regex = /^[a-zA-Z0-9]+$/; // Chỉ cho phép chữ thường, chữ hoa và số
+        return text.length >= min && text.length <= max && regex.test(text);
+    }
+
+    // XỬ LÝ ĐĂNG KÝ / ĐĂNG NHẬP VỚI CÁC ĐIỀU KIỆN CỦA BRO AN
+    window.handleAuth = async function() {
+        const username = document.getElementById('auth-username').value.trim();
+        const email = document.getElementById('auth-email').value.trim();
+        const password = document.getElementById('auth-password').value.trim();
+
+        if (!email || !password) {
+            return alert("Vui lòng điền đầy đủ các thông tin!");
+        }
+
+        // Kiểm tra điều kiện mật khẩu nghiêm ngặt
+        if (!validateInput(password, 6, 12)) {
+            return alert("Mật khẩu lỗi: Từ 6-12 ký tự, KHÔNG DẤU, KHÔNG CÁCH!");
+        }
+
+        if (isRegisterMode) {
+            // Kiểm tra điều kiện tên tài khoản
+            if (!validateInput(username, 6, 16)) {
+                return alert("Tên tài khoản lỗi: Từ 6-16 ký tự, KHÔNG DẤU, KHÔNG CÁCH!");
+            }
+            if (username === password) {
+                return alert("Bảo mật kém: Tên tài khoản không được trùng hoàn toàn với mật khẩu!");
+            }
+
+            printLog("🛰️ Đang kiểm tra hệ thống và khởi tạo gói đăng ký...", "#ff9e64");
+            
+            try {
+                // 1. Tạo tài khoản Email trên Firebase Auth
+                const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+                const user = userCredential.user;
+
+                // 2. Tự động gửi Email xác nhận kích hoạt từ Google Server về hộp thư
+                await sendEmailVerification(user);
+                
+                // 3. Sinh một chuỗi ngẫu nhiên làm mã API KEY riêng duy nhất vĩnh viễn (ANDB Key)
+                const generatedApiKey = "andb_" + Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+
+                // 4. Đẩy thông tin tài khoản lên database
+                await set(ref(database, 'andb_users/' + user.uid), {
+                    username: username,
+                    email: email,
+                    apiKey: generatedApiKey,
+                    data_storage: {}
+                });
+
+                alert(`Đăng ký thành công tài khoản "${username}"!\nMột email kích hoạt đã được gửi tới ${email}. Trình duyệt web khi ông mở liên kết trong email sẽ hỏi lời chấp nhận kích hoạt tài khoản của ông.`);
+                signOut(auth);
+                switchMode(false);
+            } catch (err) {
+                alert("Lỗi đăng ký: Email này đã có người dùng hoặc hệ thống từ chối!");
+                printLog(err.message, "#f7768e");
+            }
+
+        } else {
+            // XỬ LÝ ĐĂNG NHẬP THỦ CÔNG
+            printLog("🔐 Đang xác thực thông tin đăng nhập...");
+            try {
+                await signInWithEmailAndPassword(auth, email, password);
+            } catch (err) {
+                alert("Đăng nhập thất bại! Sai email hoặc mật khẩu.");
+                printLog(err.message, "#f7768e");
+            }
+        }
+    }
+
+    // ĐIỀU KHIỂN LOGIC THEO DÕI TRẠNG THÁI NGƯỜI DÙNG TỰ ĐỘNG
+    onAuthStateChanged(auth, async (user) => {
+        if (user) {
+            currentUserUid = user.uid;
+            document.getElementById('auth-box').style.display = 'none';
+            document.getElementById('dashboard-box').style.display = 'block';
+
+            // Lấy thông tin API Key và Tên tài khoản từ Database về hiển thị
+            const snapshot = await get(child(ref(database), `andb_users/${user.uid}`));
+            if (snapshot.exists()) {
+                const userData = snapshot.val();
+                document.getElementById('display-apikey').innerText = userData.apiKey;
+                printLog(`Xin chào thành viên: ${userData.username}!`);
+                
+                // 💥 KIỂM TRA LỜI CHẤP NHẬN KÍCH HOẠT QUA EMAIL CỦA BRO AN
+                if (user.emailVerified) {
+                    document.getElementById('verify-badge').innerText = "Đã Kích Hoạt";
+                    document.getElementById('verify-badge').className = "badge-verify verified";
+                    printLog("⚡ Trạng thái tài khoản: ĐÃ THÔNG CỔNG API DATA.", "#9ece6a");
+                } else {
+                    document.getElementById('verify-badge').innerText = "Chờ Kích Hoạt";
+                    document.getElementById('verify-badge').className = "badge-verify unverified";
+                    printLog("⚠️ TÀI KHOẢN CHƯA KÍCH HOẠT EMAIL!", "#f7768e");
+                    
+                    // Cơ chế hỏi lời chấp nhận kích hoạt như bro yêu cầu khi phát hiện chưa verify
+                    if(confirm(`Hệ thống phát hiện tài khoản "${userData.username}" chưa kích hoạt.\nBạn có muốn kích hoạt tài khoản bằng liên kết đã gửi trong hộp thư không?`)) {
+                        printLog("Vui lòng kiểm tra Hộp thư đến (hoặc thư rác) để click liên kết kích hoạt.");
+                    } else {
+                        printLog("Bạn đã từ chối kích hoạt. Chức năng lưu API tạm khóa.", "#f7768e");
+                    }
+                }
+            }
+        } else {
+            currentUserUid = null;
+            document.getElementById('auth-box').style.display = 'block';
+            document.getElementById('dashboard-box').style.display = 'none';
+        }
+    });
+
+    // Hàm ẩn hiện ô nhập giá trị theo loại File
+    window.adjustFormFields = function() {
+        const type = document.getElementById('data-type').value;
+        const valField = document.getElementById('val-field');
+        const valLabel = document.getElementById('val-label');
+        const valInput = document.getElementById('node-value');
+
+        if (type === 'folder') {
+            valField.style.display = 'none';
+        } else {
+            valField.style.display = 'block';
+            if (type === 'file_currency') {
+                valLabel.innerText = "Số lượng / Tiền tệ (Nhập số):";
+                valInput.type = "number";
+                valInput.placeholder = "Ví dụ: 500000";
+            } else {
+                valLabel.innerText = "Giá trị văn bản (String):";
+                valInput.type = "text";
+                valInput.placeholder = "Ví dụ: Chuỗi bất kỳ...";
+            }
+        }
+    }
+
+    // XỬ LÝ TẠO MỤC, FILE TIỀN TỆ, SỐ HOẶC XÓA DATA TRÊN KHO RIÊNG
+    window.executeDataAction = async function(action) {
+        if (!auth.currentUser) return alert("Hết phiên làm việc, vui lòng đăng nhập lại!");
+        
+        // Buộc phải kích hoạt email thì mới cho tác động vào dữ liệu
+        if (!auth.currentUser.emailVerified) {
+            return alert("⚠️ Lỗi: Tài khoản của ông chưa được kích hoạt từ Email! Không thể tạo/sửa dữ liệu.");
+        }
+
+        const type = document.getElementById('data-type').value;
+        const nodeName = document.getElementById('node-name').value.trim();
+        let nodeValue = document.getElementById('node-value').value.trim();
+
+        if (!nodeName) return alert("Vui lòng nhập Tên mục hoặc Tên file!");
+
+        const dbPath = `andb_users/${currentUserUid}/data_storage/${nodeName}`;
+
+        try {
+            if (action === 'delete') {
+                await remove(ref(database, dbPath));
+                printLog(`🗑️ Đã xóa hoàn toàn mục/file: "${nodeName}" khỏi bộ nhớ.`);
+            } else {
+                let dataToSave = {};
+                if (type === 'folder') {
+                    dataToSave = { is_folder: true, contents: "empty_node" };
+                } else if (type === 'file_currency') {
+                    dataToSave = Number(nodeValue) || 0; // Ép kiểu về dạng Số (tiền tệ)
+                } else {
+                    dataToSave = nodeValue; // Giữ nguyên dạng chữ
+                }
+
+                await set(ref(database, dbPath), dataToSave);
+                printLog(`💾 Đã tạo/cập nhật thành công "${nodeName}" lên đám mây ANDB!`, "#9ece6a");
+            }
+        } catch (err) {
+            printLog("Thất bại: " + err.message, "#f7768e");
+        }
+    }
+
+    window.logout = function() {
+        signOut(auth);
+        printLog("Đã đăng xuất hệ thống an toàn.");
+    }
+
+    // Khởi tạo giao diện form đầu tiên
+    adjustFormFields();
+</script>
+</body>
+</html>
