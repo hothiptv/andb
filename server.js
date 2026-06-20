@@ -1,5 +1,6 @@
 const express = require('express');
 const cors = require('cors');
+const path = require('path');
 require('dotenv').config();
 
 const userLogic = require('./data/user.js');
@@ -9,6 +10,14 @@ const dbLogic = require('./data/database.js');
 const app = express();
 app.use(cors());
 app.use(express.json());
+
+// 💥 Đã cấu hình thêm: Biến thư mục này thành thư mục tĩnh để truy cập được index.html
+app.use(express.static(__dirname));
+
+// Định tuyến mặc định khi vào link gốc sẽ tự động mở file index.html
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, 'index.html'));
+});
 
 // -------------------------------------------------------------
 // [POST] - ĐĂNG KÝ (LƯU THẲNG LÊN GITHUB QUA RENDER)
@@ -126,5 +135,6 @@ app.post('/api/andb/data-connect', async (req, res) => {
     }
 });
 
+// Lắng nghe cổng từ môi trường Render (Mặc định thường là 10000)
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`🚀 ANDB Engine đang chạy trên port ${PORT}`));
