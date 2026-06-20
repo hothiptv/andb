@@ -3,227 +3,35 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ANDB - NextGen API Data Hub</title>
+    <title>ANDB // Data Hub</title>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
     <style>
         :root {
-            --bg-color: #060913;
-            --panel-bg: #0d1222;
-            --accent-cyan: #00f0ff;
-            --accent-purple: #9d4edd;
-            --text-color: #c0caf5;
-            --neon-shadow: 0 0 10px rgba(0, 240, 255, 0.3), 0 0 20px rgba(0, 240, 255, 0.1);
+            --bg-color: #060913; --panel-bg: #0d1222; --accent-cyan: #00f0ff;
+            --accent-purple: #9d4edd; --text-color: #c0caf5;
         }
-
         body {
-            background-color: var(--bg-color);
-            color: var(--text-color);
-            font-family: 'Share Tech Mono', monospace;
-            margin: 0;
-            padding: 20px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            overflow-x: hidden;
+            background-color: var(--bg-color); color: var(--text-color);
+            font-family: 'Share Tech Mono', monospace; margin: 0; padding: 20px;
+            display: flex; justify-content: center; align-items: center; min-height: 100vh;
         }
-
-        /* Hiệu ứng nền ma trận quét */
-        body::before {
-            content: "";
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
-            background-size: 100% 4px, 6px 100%;
-            z-index: 1000;
-            pointer-events: none;
-        }
-
-        .container {
-            width: 100%;
-            max-width: 750px;
-            perspective: 1000px;
-        }
-
+        .container { width: 100%; max-width: 700px; }
         .panel {
-            background: var(--panel-bg);
-            border: 2px solid #1f294d;
-            border-radius: 16px;
-            padding: 30px;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.5), inset 0 0 15px rgba(0, 240, 255, 0.05);
-            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-            position: relative;
-            backdrop-filter: blur(10px);
+            background: var(--panel-bg); border: 2px solid #1f294d; border-radius: 16px;
+            padding: 30px; box-shadow: 0 15px 35px rgba(0,0,0,0.5); position: relative;
         }
-
-        .panel:hover {
-            border-color: var(--accent-cyan);
-            box-shadow: 0 0 25px rgba(0, 240, 255, 0.2), inset 0 0 20px rgba(0, 240, 255, 0.05);
-        }
-
-        h1.brand {
-            font-family: 'Orbitron', sans-serif;
-            text-align: center;
-            color: #fff;
-            text-shadow: 0 0 10px var(--accent-cyan);
-            font-size: 2.5rem;
-            margin-bottom: 5px;
-            letter-spacing: 4px;
-        }
-
-        .subtitle {
-            text-align: center;
-            color: #565f89;
-            font-size: 0.9rem;
-            margin-bottom: 30px;
-            text-transform: uppercase;
-        }
-
-        /* Form điều khiển nhập liệu */
-        .input-group {
-            position: relative;
-            margin-bottom: 20px;
-        }
-
-        .input-group i {
-            position: absolute;
-            left: 15px;
-            top: 15px;
-            color: #414868;
-            transition: 0.3s;
-        }
-
-        input, select, textarea {
-            width: 100%;
-            padding: 14px 15px 14px 45px;
-            background: #090d1a;
-            border: 1px solid #242b4b;
-            border-radius: 8px;
-            color: #fff;
-            font-family: inherit;
-            font-size: 1rem;
-            box-sizing: border-box;
-            transition: 0.3s;
-        }
-
-        input:focus, select:focus {
-            border-color: var(--accent-cyan);
-            outline: none;
-            box-shadow: 0 0 10px rgba(0, 240, 255, 0.2);
-        }
-
-        input:focus + i {
-            color: var(--accent-cyan);
-        }
-
-        .btn {
-            width: 100%;
-            padding: 15px;
-            background: linear-gradient(45deg, #00f0ff, #9d4edd);
-            border: none;
-            border-radius: 8px;
-            color: #fff;
-            font-family: 'Orbitron', sans-serif;
-            font-weight: bold;
-            font-size: 1rem;
-            cursor: pointer;
-            letter-spacing: 2px;
-            transition: 0.3s;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.4);
-        }
-
-        .btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 0 20px rgba(0, 240, 255, 0.4);
-        }
-
-        .btn:active { transform: translateY(1px); }
-
-        .switch-mode {
-            text-align: center;
-            margin-top: 15px;
-            font-size: 0.9rem;
-            color: #565f89;
-        }
-
-        .switch-mode span {
-            color: var(--accent-cyan);
-            cursor: pointer;
-            text-decoration: underline;
-        }
-
-        /* Khu vực hiển thị sau khi đăng nhập */
+        h1.brand { font-family: 'Orbitron', sans-serif; text-align: center; color: #fff; text-shadow: 0 0 10px var(--accent-cyan); letter-spacing: 3px; }
+        .input-group { position: relative; margin-bottom: 15px; }
+        input, select { width: 100%; padding: 12px 15px 12px 40px; background: #090d1a; border: 1px solid #242b4b; border-radius: 8px; color: #fff; font-family: inherit; box-sizing: border-box; }
+        .input-group i { position: absolute; left: 15px; top: 14px; color: #414868; }
+        .btn { width: 100%; padding: 12px; background: linear-gradient(45deg, #00f0ff, #9d4edd); border: none; border-radius: 8px; color: #fff; font-family: 'Orbitron', sans-serif; font-weight: bold; cursor: pointer; margin-bottom: 10px; transition: 0.3s; }
+        .btn:hover { box-shadow: 0 0 15px var(--accent-cyan); transform: translateY(-1px); }
+        .btn-google { background: #db4437; color: #fff; display: flex; align-items: center; justify-content: center; gap: 10px; }
+        .btn-google:hover { box-shadow: 0 0 15px #db4437; }
         .dashboard { display: none; }
-
-        .api-box {
-            background: #090d1a;
-            border: 1px dashed var(--accent-cyan);
-            padding: 15px;
-            border-radius: 8px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 25px;
-        }
-
-        .api-key {
-            color: #e0af68;
-            font-weight: bold;
-            font-size: 1.1rem;
-            letter-spacing: 1px;
-        }
-
-        .badge-verify {
-            background: #242b4b;
-            padding: 4px 8px;
-            border-radius: 4px;
-            font-size: 0.8rem;
-        }
-
-        .verified { color: #9ece6a; border: 1px solid #9ece6a; }
-        .unverified { color: #f7768e; border: 1px solid #f7768e; }
-
-        /* Khung quản lý file data */
-        .manager-box {
-            background: #090d1a;
-            border: 1px solid #1f294d;
-            padding: 20px;
-            border-radius: 10px;
-            margin-top: 20px;
-        }
-
-        .manager-title {
-            font-family: 'Orbitron', sans-serif;
-            color: var(--accent-cyan);
-            border-bottom: 1px solid #1f294d;
-            padding-bottom: 10px;
-            margin-bottom: 15px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .row-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 15px;
-        }
-
-        /* Console log mini */
-        #term-log {
-            background: #020408;
-            border: 1px solid #1a1f36;
-            border-radius: 6px;
-            padding: 12px;
-            font-size: 0.85rem;
-            color: #73daca;
-            height: 100px;
-            overflow-y: auto;
-            margin-top: 15px;
-            white-space: pre-wrap;
-        }
+        .api-box { background: #090d1a; border: 1px dashed var(--accent-cyan); padding: 15px; border-radius: 8px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; }
+        #term-log { background: #020408; padding: 12px; border-radius: 6px; color: #73daca; height: 100px; overflow-y: auto; font-size: 0.85rem; margin-top: 15px; white-space: pre-wrap; }
     </style>
 </head>
 <body>
@@ -231,66 +39,208 @@
 <div class="container">
     <div class="panel">
         <h1 class="brand">ANDB // HUB</h1>
-        <div class="subtitle">Hệ thống API Cấu Trúc Dữ Liệu Biệt Lập</div>
-
+        
+        <!-- FORM ĐĂNG NHẬP / ĐĂNG KÝ -->
         <div id="auth-box">
-            <h3 id="form-title" style="color: #fff; margin-bottom: 20px;"><i class="fa-solid : fontawesome-icon-class"></i> ĐĂNG NHẬP HỆ THỐNG</h3>
+            <h3 id="form-title" style="color:#fff;"><i class="fa-solid fa-lock"></i> ĐĂNG NHẬP HỆ THỐNG</h3>
             
             <div class="input-group" id="user-field" style="display: none;">
                 <input type="text" id="auth-username" placeholder="Tên tài khoản (6-16 ký tự, ko dấu, ko cách)">
                 <i class="fa-solid fa-user"></i>
             </div>
-
             <div class="input-group">
-                <input type="email" id="auth-email" placeholder="Địa chỉ Email của bạn">
+                <input type="email" id="auth-email" placeholder="Địa chỉ Email">
                 <i class="fa-solid fa-envelope"></i>
             </div>
-
             <div class="input-group">
                 <input type="password" id="auth-password" placeholder="Mật khẩu (6-12 ký tự, ko dấu, ko cách)">
-                <i class="fa-solid fa-lock"></i>
+                <i class="fa-solid fa-key"></i>
             </div>
 
-            <button class="btn" id="btn-submit" onclick="handleAuth()">XÁC NHẬN TRUY CẬP</button>
+            <button class="btn" id="btn-submit">XÁC NHẬN TRUY CẬP</button>
+            <button class="btn btn-google" id="btn-google"><i class="fa-brands fa-google"></i> ĐĂNG NHẬP BẰNG GMAIL GOOGLE</button>
             
-            <div class="switch-mode" id="toggle-text">
-                Chưa có mã nguồn? <span onclick="switchMode(true)">Đăng ký tài khoản ANDB ngay</span>
+            <div style="text-align:center; font-size:0.9rem; color:#565f89; margin-top:10px;">
+                <span id="toggle-text" style="color:var(--accent-cyan); cursor:pointer; text-decoration:underline;">Đăng ký tài khoản ANDB mới</span>
             </div>
         </div>
 
+        <!-- DASHBOARD QUẢN LÝ DỮ LIỆU -->
         <div id="dashboard-box" class="dashboard">
             <div class="api-box">
                 <div>
-                    <span style="font-size: 0.8rem; color:#565f89; display:block;">MÃ API DATA ANDB CỦA BẠN:</span>
-                    <span class="api-key" id="display-apikey">🔑 Khởi tạo...</span>
+                    <span style="font-size:0.8rem; color:#565f89;">MÃ API DATA ANDB CỦA BẠN:</span>
+                    <span id="display-apikey" style="color:#e0af68; font-weight:bold; display:block; font-size:1.1rem;">🔑 Đang lấy khóa...</span>
                 </div>
-                <span id="verify-badge" class="badge-verify unverified">Chưa kích hoạt</span>
+                <span id="verify-badge" style="padding:4px 8px; border-radius:4px; font-size:0.8rem; border:1px solid #f7768e; color:#f7768e;">Chờ kích hoạt</span>
             </div>
 
-            <div class="manager-box">
-                <div class="manager-title"><i class="fa-solid fa-folder-tree"></i> TRÌNH QUẢN LÝ MỤC & FILE DATA</div>
-                
-                <label style="font-size:0.8rem; color:#565f89;">Chọn loại dữ liệu muốn khởi tạo:</label>
-                <select id="data-type" style="padding-left:15px; margin-top:5px;" onchange="adjustFormFields()">
+            <div style="background:#090d1a; padding:15px; border-radius:8px; border:1px solid #1f294d;">
+                <div style="color:var(--accent-cyan); font-family:'Orbitron'; margin-bottom:10px;"><i class="fa-solid fa-folder-tree"></i> QUẢN LÝ MỤC & FILE</div>
+                <select id="data-type" style="margin-bottom:10px;">
                     <option value="folder">📁 Tạo mục lớn (Thư mục trống)</option>
-                    <option value="file_text">📝 Thêm File dữ liệu chữ (Văn bản / String)</option>
+                    <option value="file_text">📝 Thêm File dữ liệu chữ (String)</option>
                     <option value="file_currency">💰 Thêm File Tiền tệ & Số (Number)</option>
                 </select>
-
-                <div class="row-grid" style="margin-top: 15px;">
-                    <div>
-                        <label style="font-size:0.8rem; color:#565f89;">Tên mục / Tên File:</label>
-                        <input type="text" id="node-name" placeholder="Ví dụ: vang_user, level" style="padding-left:15px; margin-top:5px;">
-                    </div>
-                    <div id="val-field" style="display: none;">
-                        <label style="font-size:0.8rem; color:#565f89;" id="val-label">Giá trị:</label>
-                        <input type="text" id="node-value" placeholder="Nhập giá trị..." style="padding-left:15px; margin-top:5px;">
-                    </div>
+                <input type="text" id="node-name" placeholder="Tên mục / Tên file" style="margin-bottom:10px;">
+                <input type="text" id="node-value" placeholder="Giá trị...">
+                
+                <div style="display:flex; gap:10px; margin-top:15px;">
+                    <button class="btn" style="background:#10b981;" id="btn-save">⚡ THỰC THI</button>
+                    <button class="btn" style="background:#ef4444;" id="btn-delete">🗑️ XÓA MỤC</button>
                 </div>
+            </div>
 
-                <div class="row-grid" style="margin-top:15px;">
-                    <button class="btn" style="background: #10b981;" onclick="executeDataAction('set')">⚡ THỰC THI/CẬP NHẬT</button>
-                    <button class="btn" style="background: #ef4444;" onclick="executeDataAction('delete')">🗑️ XÓA MỤC NÀY</button>
+            <div id="term-log">&gt;_ Hệ thống dữ liệu ANDB đã sẵn sàng.</div>
+            <button class="btn" style="background:#242b4b; margin-top:15px;" id="btn-logout">ĐĂNG XUẤT</button>
+        </div>
+    </div>
+</div>
+
+<!-- LOGIC XỬ LÝ KẾT NỐI -->
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+    import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signInWithPopup, GoogleAuthProvider, sendEmailVerification, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+
+    const firebaseConfig = {
+        apiKey: "AIzaSyAnsLAxCi_1RiYZ7kwwzNi7subRrvTI04I",
+        authDomain: "dataan-d19b7.firebaseapp.com",
+        projectId: "dataan-d19b7",
+        storageBucket: "dataan-d19b7.firebasestorage.app",
+        messagingSenderId: "634110626824",
+        appId: "1:634110626824:web:903a5181db232369f495bd"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const googleProvider = new GoogleAuthProvider();
+    
+    // 🔴 ĐƯỜNG LINK SERVER RENDER CỦA BRO AN
+    const SERVER_URL = "https://andb-szh6.onrender.com";
+    
+    let isRegisterMode = false;
+
+    function printLog(msg) { document.getElementById('term-log').innerText += `\n> ${msg}`; }
+
+    // Chuyển form Đăng ký / Đăng nhập
+    document.getElementById('toggle-text').addEventListener('click', () => {
+        isRegisterMode = !isRegisterMode;
+        document.getElementById('form-title').innerHTML = isRegisterMode ? '<i class="fa-solid fa-user-plus"></i> ĐĂNG KÝ TÀI KHOẢN' : '<i class="fa-solid fa-lock"></i> ĐĂNG NHẬP HỆ THỐNG';
+        document.getElementById('user-field').style.display = isRegisterMode ? 'block' : 'none';
+        document.getElementById('toggle-text').innerText = isRegisterMode ? 'Đã có tài khoản? Đăng nhập ngay' : 'Đăng ký tài khoản ANDB mới';
+    });
+
+    // 1. ĐĂNG NHẬP BẰNG GOOGLE GMAIL
+    document.getElementById('btn-google').addEventListener('click', async () => {
+        try {
+            const result = await signInWithPopup(auth, googleProvider);
+            printLog(`Đăng nhập Google thành công: ${result.user.email}`);
+        } catch (err) {
+            alert("Lỗi đăng nhập Google: " + err.message);
+        }
+    });
+
+    // 2. ĐĂNG KÝ / ĐĂNG NHẬP THỦ CÔNG QUA FIREBASE AUTH
+    document.getElementById('btn-submit').addEventListener('click', async () => {
+        const username = document.getElementById('auth-username').value.trim();
+        const email = document.getElementById('auth-email').value.trim();
+        const password = document.getElementById('auth-password').value.trim();
+
+        if(!email || !password) return alert("Vui lòng nhập đủ thông tin!");
+
+        if (isRegisterMode) {
+            if(!username) return alert("Vui lòng nhập Tên tài khoản!");
+            try {
+                const cred = await createUserWithEmailAndPassword(auth, email, password);
+                await sendEmailVerification(cred.user);
+                alert("Đăng ký thành công! Đã gửi email kích hoạt vào hộp thư của ông.");
+                signOut(auth);
+                location.reload();
+            } catch (err) { alert("Lỗi: " + err.message); }
+        } else {
+            try {
+                await signInWithEmailAndPassword(auth, email, password);
+            } catch (err) { alert("Sai tài khoản hoặc mật khẩu!"); }
+        }
+    });
+
+    // 3. THEO DÕI TRẠNG THÁI VÀ ĐỒNG BỘ VỚI SERVER RENDER -> GITHUB
+    onAuthStateChanged(auth, async (user) => {
+        if (user) {
+            document.getElementById('auth-box').style.display = 'none';
+            document.getElementById('dashboard-box').style.display = 'block';
+            
+            // Hỏi lời chấp nhận kích hoạt nếu chưa verify email (đối với acc thủ công)
+            let verifiedStatus = user.emailVerified;
+            if(user.providerData[0].providerId === 'google.com') {
+                verifiedStatus = true; // Nếu đăng nhập bằng Google Gmail thì tự động coi như đã kích hoạt
+            }
+
+            if (!verifiedStatus) {
+                if(confirm("Tài khoản của bạn chưa kích hoạt. Bạn có muốn kích hoạt bằng Email không?")) {
+                    printLog("Hãy bấm vào liên kết trong hộp thư email để kích hoạt.");
+                }
+            } else {
+                document.getElementById('verify-badge').innerText = "Đã kích hoạt";
+                document.getElementById('verify-badge').style.color = "#9ece6a";
+                document.getElementById('verify-badge').style.borderColor = "#9ece6a";
+            }
+
+            // Đồng bộ gọi lên Server Render để lấy hoặc tạo API Key trên GitHub
+            try {
+                const res = await fetch(`${SERVER_URL}/api/andb/sync-user`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        uid: user.uid,
+                        email: user.email,
+                        username: user.displayName || user.email.split('@')[0],
+                        emailVerified: verifiedStatus
+                    })
+                });
+                const serverData = await res.json();
+                document.getElementById('display-apikey').innerText = serverData.apiKey;
+                localStorage.setItem("andb_key", serverData.apiKey);
+                printLog("Đã kết nối với đám mây dữ liệu GitHub!");
+            } catch (err) { printLog("Lỗi kết nối server Render: " + err.message); }
+        } else {
+            document.getElementById('auth-box').style.display = 'block';
+            document.getElementById('dashboard-box').style.display = 'none';
+        }
+    });
+
+    // 4. HÀM TẠO / SỬA DATA LÊN GITHUB
+    document.getElementById('btn-save').addEventListener('click', () => executeAction('set'));
+    document.getElementById('btn-delete').addEventListener('click', () => executeAction('delete'));
+
+    async function executeAction(action) {
+        const apiKey = localStorage.getItem("andb_key");
+        const type = document.getElementById('data-type').value;
+        const node_name = document.getElementById('node-name').value.trim();
+        const node_value = document.getElementById('node-value').value.trim();
+
+        if(!node_name) return alert("Nhập tên mục/file!");
+
+        try {
+            const res = await fetch(`${SERVER_URL}/api/andb/data-connect`, {
+                method: 'POST',
+                headers: { 
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${apiKey}`
+                },
+                body: JSON.stringify({ action, type, node_name, node_value })
+            });
+            const data = await res.json();
+            if(data.success) { alert("Đồng bộ GitHub thành công!"); location.reload(); }
+            else { alert("Lỗi: " + data.error); }
+        } catch (err) { alert("Lỗi kết nối!"); }
+    }
+
+    document.getElementById('btn-logout').addEventListener('click', () => signOut(auth));
+</script>
+</body>
+</html>
+  <button class="btn" style="background: #ef4444;" onclick="executeDataAction('delete')">🗑️ XÓA MỤC NÀY</button>
                 </div>
             </div>
 
