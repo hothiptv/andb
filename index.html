@@ -2,7 +2,7 @@
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>ANDB // Data Hub</title>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -11,27 +11,40 @@
             --bg-color: #060913; --panel-bg: #0d1222; --accent-cyan: #00f0ff;
             --accent-purple: #9d4edd; --text-color: #c0caf5;
         }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
         body {
             background-color: var(--bg-color); color: var(--text-color);
-            font-family: 'Share Tech Mono', monospace; margin: 0; padding: 20px;
+            font-family: 'Share Tech Mono', monospace; padding: 10px;
             display: flex; justify-content: center; align-items: center; min-height: 100vh;
         }
-        .container { width: 100%; max-width: 700px; }
+        .container { width: 100%; max-width: 600px; padding: 5px; }
         .panel {
-            background: var(--panel-bg); border: 2px solid #1f294d; border-radius: 16px;
-            padding: 30px; box-shadow: 0 15px 35px rgba(0,0,0,0.5); position: relative;
+            background: var(--panel-bg); border: 2px solid #1f294d; border-radius: 12px;
+            padding: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); width: 100%;
         }
-        h1.brand { font-family: 'Orbitron', sans-serif; text-align: center; color: #fff; text-shadow: 0 0 10px var(--accent-cyan); letter-spacing: 3px; }
-        .input-group { position: relative; margin-bottom: 15px; }
-        input, select { width: 100%; padding: 12px 15px 12px 40px; background: #090d1a; border: 1px solid #242b4b; border-radius: 8px; color: #fff; font-family: inherit; box-sizing: border-box; }
-        .input-group i { position: absolute; left: 15px; top: 14px; color: #414868; }
-        .btn { width: 100%; padding: 12px; background: linear-gradient(45deg, #00f0ff, #9d4edd); border: none; border-radius: 8px; color: #fff; font-family: 'Orbitron', sans-serif; font-weight: bold; cursor: pointer; margin-bottom: 10px; transition: 0.3s; }
-        .btn:hover { box-shadow: 0 0 15px var(--accent-cyan); transform: translateY(-1px); }
-        .btn-google { background: #db4437; color: #fff; display: flex; align-items: center; justify-content: center; gap: 10px; }
-        .btn-google:hover { box-shadow: 0 0 15px #db4437; }
+        h1.brand { font-family: 'Orbitron', sans-serif; text-align: center; color: #fff; text-shadow: 0 0 8px var(--accent-cyan); letter-spacing: 2px; font-size: 1.8rem; margin-bottom: 20px; }
+        .input-group { position: relative; margin-bottom: 12px; }
+        input, select { width: 100%; padding: 10px 12px 10px 38px; background: #090d1a; border: 1px solid #242b4b; border-radius: 6px; color: #fff; font-family: inherit; font-size: 0.95rem; }
+        .input-group i { position: absolute; left: 12px; top: 13px; color: #414868; }
+        .btn { width: 100%; padding: 12px; background: linear-gradient(45deg, #00f0ff, #9d4edd); border: none; border-radius: 6px; color: #fff; font-family: 'Orbitron', sans-serif; font-weight: bold; cursor: pointer; margin-bottom: 10px; font-size: 0.9rem; transition: 0.2s; }
+        .btn:hover { box-shadow: 0 0 10px var(--accent-cyan); }
+        .btn-google { background: #db4437; display: flex; align-items: center; justify-content: center; gap: 8px; }
         .dashboard { display: none; }
-        .api-box { background: #090d1a; border: 1px dashed var(--accent-cyan); padding: 15px; border-radius: 8px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; }
-        #term-log { background: #020408; padding: 12px; border-radius: 6px; color: #73daca; height: 100px; overflow-y: auto; font-size: 0.85rem; margin-top: 15px; white-space: pre-wrap; }
+        .api-box { background: #090d1a; border: 1px dashed var(--accent-cyan); padding: 12px; border-radius: 6px; margin-bottom: 15px; display: flex; justify-content: space-between; align-items: center; gap: 10px; }
+        #display-apikey { color: #e0af68; font-weight: bold; word-break: break-all; font-size: 0.95rem; display: block; margin-top: 2px; }
+        .action-container { background:#090d1a; padding:15px; border-radius:6px; border:1px solid #1f294d; }
+        .flex-buttons { display: flex; gap: 10px; margin-top: 10px; }
+        #term-log { background: #020408; padding: 10px; border-radius: 6px; color: #73daca; height: 80px; overflow-y: auto; font-size: 0.8rem; margin-top: 12px; white-space: pre-wrap; border: 1px solid #1a1b26; }
+        
+        /* CẤU HÌNH ĐÁP ỨNG DI ĐỘNG */
+        @media (max-width: 480px) {
+            body { padding: 5px; align-items: flex-start; }
+            .panel { padding: 15px; border-width: 1px; }
+            h1.brand { font-size: 1.5rem; }
+            .api-box { flex-direction: column; align-items: flex-start; }
+            #verify-badge { align-self: flex-start; margin-top: 5px; }
+            .flex-buttons { flex-direction: column; gap: 5px; }
+        }
     </style>
 </head>
 <body>
@@ -40,12 +53,11 @@
     <div class="panel">
         <h1 class="brand">ANDB // HUB</h1>
         
-        <!-- FORM ĐĂNG NHẬP / ĐĂNG KÝ -->
         <div id="auth-box">
-            <h3 id="form-title" style="color:#fff;"><i class="fa-solid fa-lock"></i> ĐĂNG NHẬP HỆ THỐNG</h3>
+            <h3 id="form-title" style="color:#fff; font-size:1rem; margin-bottom:15px;"><i class="fa-solid fa-lock"></i> ĐĂNG NHẬP HỆ THỐNG</h3>
             
             <div class="input-group" id="user-field" style="display: none;">
-                <input type="text" id="auth-username" placeholder="Tên tài khoản (6-16 ký tự, ko dấu, ko cách)">
+                <input type="text" id="auth-username" placeholder="Tên tài khoản (6-16 ký tự)">
                 <i class="fa-solid fa-user"></i>
             </div>
             <div class="input-group">
@@ -53,51 +65,49 @@
                 <i class="fa-solid fa-envelope"></i>
             </div>
             <div class="input-group">
-                <input type="password" id="auth-password" placeholder="Mật khẩu (6-12 ký tự, ko dấu, ko cách)">
+                <input type="password" id="auth-password" placeholder="Mật khẩu">
                 <i class="fa-solid fa-key"></i>
             </div>
 
             <button class="btn" id="btn-submit">XÁC NHẬN TRUY CẬP</button>
-            <button class="btn btn-google" id="btn-google"><i class="fa-brands fa-google"></i> ĐĂNG NHẬP BẰNG GMAIL GOOGLE</button>
+            <button class="btn btn-google" id="btn-google"><i class="fa-brands fa-google"></i> ĐĂNG NHẬP BẰNG GOOGLE</button>
             
-            <div style="text-align:center; font-size:0.9rem; color:#565f89; margin-top:10px;">
+            <div style="text-align:center; font-size:0.85rem; color:#565f89; margin-top:5px;">
                 <span id="toggle-text" style="color:var(--accent-cyan); cursor:pointer; text-decoration:underline;">Đăng ký tài khoản ANDB mới</span>
             </div>
         </div>
 
-        <!-- DASHBOARD QUẢN LÝ DỮ LIỆU -->
         <div id="dashboard-box" class="dashboard">
             <div class="api-box">
                 <div>
-                    <span style="font-size:0.8rem; color:#565f89;">MÃ API DATA ANDB CỦA BẠN:</span>
-                    <span id="display-apikey" style="color:#e0af68; font-weight:bold; display:block; font-size:1.1rem;">🔑 Đang lấy khóa...</span>
+                    <span style="font-size:0.75rem; color:#565f89; font-weight:bold;">MÃ API DATA ANDB CỦA BẠN:</span>
+                    <span id="display-apikey">🔑 Đang lấy khóa...</span>
                 </div>
-                <span id="verify-badge" style="padding:4px 8px; border-radius:4px; font-size:0.8rem; border:1px solid #f7768e; color:#f7768e;">Chờ kích hoạt</span>
+                <span id="verify-badge" style="padding:3px 6px; border-radius:4px; font-size:0.75rem; border:1px solid #f7768e; color:#f7768e; white-space:nowrap;">Chờ kích hoạt</span>
             </div>
 
-            <div style="background:#090d1a; padding:15px; border-radius:8px; border:1px solid #1f294d;">
-                <div style="color:var(--accent-cyan); font-family:'Orbitron'; margin-bottom:10px;"><i class="fa-solid fa-folder-tree"></i> QUẢN LÝ MỤC & FILE</div>
-                <select id="data-type" style="margin-bottom:10px;">
+            <div class="action-container">
+                <div style="color:var(--accent-cyan); font-family:'Orbitron'; font-size:0.9rem; margin-bottom:10px;"><i class="fa-solid fa-folder-tree"></i> QUẢN LÝ MỤC & FILE</div>
+                <select id="data-type" style="margin-bottom:8px;">
                     <option value="folder">📁 Tạo mục lớn (Thư mục trống)</option>
-                    <option value="file_text">📝 Thêm File dữ liệu chữ (String)</option>
-                    <option value="file_currency">💰 Thêm File Tiền tệ & Số (Number)</option>
+                    <option value="file_text">📝 Thêm File chữ (String)</option>
+                    <option value="file_currency">💰 Thêm File Số/Tiền tệ (Number)</option>
                 </select>
-                <input type="text" id="node-name" placeholder="Tên mục / Tên file" style="margin-bottom:10px;">
+                <input type="text" id="node-name" placeholder="Tên mục / Tên file" style="margin-bottom:8px;">
                 <input type="text" id="node-value" placeholder="Giá trị...">
                 
-                <div style="display:flex; gap:10px; margin-top:15px;">
-                    <button class="btn" style="background:#10b981;" id="btn-save">⚡ THỰC THI</button>
-                    <button class="btn" style="background:#ef4444;" id="btn-delete">🗑️ XÓA MỤC</button>
+                <div class="flex-buttons">
+                    <button class="btn" style="background:#10b981; margin-bottom:0;" id="btn-save">⚡ THỰC THI</button>
+                    <button class="btn" style="background:#ef4444; margin-bottom:0;" id="btn-delete">🗑️ XÓA MỤC</button>
                 </div>
             </div>
 
             <div id="term-log">&gt;_ Hệ thống dữ liệu ANDB đã sẵn sàng.</div>
-            <button class="btn" style="background:#242b4b; margin-top:15px;" id="btn-logout">ĐĂNG XUẤT</button>
+            <button class="btn" style="background:#242b4b; margin-top:12px; margin-bottom:0;" id="btn-logout">ĐĂNG XUẤT</button>
         </div>
     </div>
 </div>
 
-<!-- LOGIC XỬ LÝ KẾT NỐI -->
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
     import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signInWithPopup, GoogleAuthProvider, sendEmailVerification, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
@@ -114,15 +124,11 @@
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
     const googleProvider = new GoogleAuthProvider();
-    
-    // 🔴 ĐƯỜNG LINK SERVER RENDER CỦA BRO AN
     const SERVER_URL = "https://andb-szh6.onrender.com";
-    
     let isRegisterMode = false;
 
     function printLog(msg) { document.getElementById('term-log').innerText += `\n> ${msg}`; }
 
-    // Chuyển form Đăng ký / Đăng nhập
     document.getElementById('toggle-text').addEventListener('click', () => {
         isRegisterMode = !isRegisterMode;
         document.getElementById('form-title').innerHTML = isRegisterMode ? '<i class="fa-solid fa-user-plus"></i> ĐĂNG KÝ TÀI KHOẢN' : '<i class="fa-solid fa-lock"></i> ĐĂNG NHẬP HỆ THỐNG';
@@ -130,54 +136,85 @@
         document.getElementById('toggle-text').innerText = isRegisterMode ? 'Đã có tài khoản? Đăng nhập ngay' : 'Đăng ký tài khoản ANDB mới';
     });
 
-    // 1. ĐĂNG NHẬP BẰNG GOOGLE GMAIL
     document.getElementById('btn-google').addEventListener('click', async () => {
-        try {
-            const result = await signInWithPopup(auth, googleProvider);
-            printLog(`Đăng nhập Google thành công: ${result.user.email}`);
-        } catch (err) {
-            alert("Lỗi đăng nhập Google: " + err.message);
-        }
+        try { await signInWithPopup(auth, googleProvider); } catch (err) { alert(err.message); }
     });
 
-    // 2. ĐĂNG KÝ / ĐĂNG NHẬP THỦ CÔNG QUA FIREBASE AUTH
     document.getElementById('btn-submit').addEventListener('click', async () => {
         const username = document.getElementById('auth-username').value.trim();
         const email = document.getElementById('auth-email').value.trim();
         const password = document.getElementById('auth-password').value.trim();
-
-        if(!email || !password) return alert("Vui lòng nhập đủ thông tin!");
+        if(!email || !password) return alert("Thiếu thông tin!");
 
         if (isRegisterMode) {
-            if(!username) return alert("Vui lòng nhập Tên tài khoản!");
+            if(!username) return alert("Nhập tên tài khoản!");
             try {
                 const cred = await createUserWithEmailAndPassword(auth, email, password);
                 await sendEmailVerification(cred.user);
-                alert("Đăng ký thành công! Đã gửi email kích hoạt vào hộp thư của ông.");
-                signOut(auth);
-                location.reload();
-            } catch (err) { alert("Lỗi: " + err.message); }
+                alert("Đã gửi link kích hoạt vào email!");
+                signOut(auth); location.reload();
+            } catch (err) { alert(err.message); }
         } else {
-            try {
-                await signInWithEmailAndPassword(auth, email, password);
-            } catch (err) { alert("Sai tài khoản hoặc mật khẩu!"); }
+            try { await signInWithEmailAndPassword(auth, email, password); } catch (err) { alert("Sai tài khoản hoặc mật khẩu!"); }
         }
     });
 
-    // 3. THEO DÕI TRẠNG THÁI VÀ ĐỒNG BỘ VỚI SERVER RENDER -> GITHUB
     onAuthStateChanged(auth, async (user) => {
         if (user) {
             document.getElementById('auth-box').style.display = 'none';
             document.getElementById('dashboard-box').style.display = 'block';
-            
-            // Hỏi lời chấp nhận kích hoạt nếu chưa verify email (đối với acc thủ công)
             let verifiedStatus = user.emailVerified;
-            if(user.providerData[0].providerId === 'google.com') {
-                verifiedStatus = true; // Nếu đăng nhập bằng Google Gmail thì tự động coi như đã kích hoạt
+            if(user.providerData[0].providerId === 'google.com') verifiedStatus = true;
+
+            if (verifiedStatus) {
+                document.getElementById('verify-badge').innerText = "Đã kích hoạt";
+                document.getElementById('verify-badge').style.color = "#9ece6a";
+                document.getElementById('verify-badge').style.borderColor = "#9ece6a";
             }
 
-            if (!verifiedStatus) {
-                if(confirm("Tài khoản của bạn chưa kích hoạt. Bạn có muốn kích hoạt bằng Email không?")) {
+            try {
+                const res = await fetch(`${SERVER_URL}/api/andb/sync-user`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ uid: user.uid, email: user.email, username: user.displayName || user.email.split('@')[0], emailVerified: verifiedStatus })
+                });
+                const serverData = await res.json();
+                document.getElementById('display-apikey').innerText = serverData.apiKey;
+                localStorage.setItem("andb_key", serverData.apiKey);
+                printLog("Đồng bộ dữ liệu đám mây thành công!");
+            } catch (err) { printLog("Lỗi nạp API từ Render."); }
+        } else {
+            document.getElementById('auth-box').style.display = 'block';
+            document.getElementById('dashboard-box').style.display = 'none';
+        }
+    });
+
+    document.getElementById('btn-save').addEventListener('click', () => executeAction('set'));
+    document.getElementById('btn-delete').addEventListener('click', () => executeAction('delete'));
+
+    async function executeAction(action) {
+        const apiKey = localStorage.getItem("andb_key");
+        const type = document.getElementById('data-type').value;
+        const node_name = document.getElementById('node-name').value.trim();
+        const node_value = document.getElementById('node-value').value.trim();
+        if(!node_name) return alert("Nhập tên mục/file!");
+
+        try {
+            const res = await fetch(`${SERVER_URL}/api/andb/data-connect`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${apiKey}` },
+                body: JSON.stringify({ action, type, node_name, node_value })
+            });
+            const data = await res.json();
+            if(data.success) { alert("Cập nhật GitHub thành công!"); location.reload(); }
+            else { alert(data.error); }
+        } catch (err) { alert("Lỗi kết nối!"); }
+    }
+    document.getElementById('btn-logout').addEventListener('click', () => signOut(auth));
+</script>
+</body>
+</html>
+kích hoạt. Bạn có muốn kích hoạt bằng Email không?")) {
                     printLog("Hãy bấm vào liên kết trong hộp thư email để kích hoạt.");
                 }
             } else {
